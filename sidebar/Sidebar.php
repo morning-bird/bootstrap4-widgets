@@ -198,6 +198,9 @@ class Sidebar extends Widget {
             'class' => 'collapse first-level'
         ]);
         foreach ($items as $item) {
+            if (@$item['visible']===false) {
+                continue;
+            }
             $text = Html::tag('i', '', [
                 'class' => 'mdi mdi-view-quilt'
             ]) . Html::tag('span', $item['label'], [
