@@ -161,9 +161,9 @@ class Sidebar extends Widget {
         if (empty($items)) {
             $items = '';
         } else {
-            $linkOptions['data-toggle'] = 'dropdown';
-            Html::addCssClass($options, ['widget' => 'dropdown']);
-            Html::addCssClass($linkOptions, ['widget' => 'dropdown-toggle']);
+            // $linkOptions['data-toggle'] = 'dropdown';
+            // Html::addCssClass($options, ['widget' => 'dropdown']);
+            Html::addCssClass($linkOptions, ['widget' => 'has-arrow']);
             if (is_array($items)) {
                 $items = $this->isChildActive($items, $active);
                 $items = $this->renderDropdown($items, $item);
@@ -194,15 +194,33 @@ class Sidebar extends Widget {
      */
     protected function renderDropdown($items, $parentItem)
     {
-        /** @var Widget $dropdownClass */
-        $dropdownClass = $this->dropdownClass;
-        return $dropdownClass::widget([
-            'options' => ArrayHelper::getValue($parentItem, 'dropdownOptions', []),
-            'items' => $items,
-            'encodeLabels' => $this->encodeLabels,
-            'clientOptions' => false,
-            'view' => $this->getView(),
+        $s = Html::beginTag('ul', [
+            'class' => 'collapse first-level'
         ]);
+        foreach ($items as $item) {
+            $text = Html::tag('i', '', [
+                'class' => 'mdi mdi-view-quilt'
+            ]) . Html::tag('span', $item['label'], [
+                'class' => 'hide-menu'
+            ]);
+            $a = Html::a($text, $item['url'] ?: '#', [
+                'class' => 'sidebar-link'
+            ]);
+            $s .= Html::tag('li', $a, [
+                'class' => 'sidebar-item'
+            ]);
+        }
+        $s .= Html::endTag('ul');
+        return $s;
+        /** @var Widget $dropdownClass */
+        // $dropdownClass = $this->dropdownClass;
+        // return $dropdownClass::widget([
+        //     'options' => ArrayHelper::getValue($parentItem, 'dropdownOptions', []),
+        //     'items' => $items,
+        //     'encodeLabels' => $this->encodeLabels,
+        //     'clientOptions' => false,
+        //     'view' => $this->getView(),
+        // ]);
     }
 
     /**
